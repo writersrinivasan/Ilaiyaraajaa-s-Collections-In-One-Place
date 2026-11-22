@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { Catalog, Song } from "@/lib/catalog";
+import Assistant from "./Assistant";
 
-type Tab = "songs" | "films" | "years" | "singers" | "moods" | "bgm" | "playlist";
+type Tab = "ai" | "songs" | "films" | "years" | "singers" | "moods" | "bgm" | "playlist";
 
 const TABS: { id: Tab; label: string; ta: string }[] = [
+  { id: "ai", label: "✨ AI Assistant", ta: "AI உதவியாளர்" },
   { id: "songs", label: "Songs", ta: "பாடல்கள்" },
   { id: "films", label: "Films", ta: "திரைப்படங்கள்" },
   { id: "years", label: "Year-wise", ta: "ஆண்டுகள்" },
@@ -43,6 +45,8 @@ export default function Explorer({ catalog }: { catalog: Catalog }) {
   const [nowIdx, setNowIdx] = useState(0);
 
   useEffect(() => {
+    const h = window.location.hash.slice(1) as Tab;
+    if (TABS.some((t) => t.id === h)) setTab(h);
     try {
       const saved = JSON.parse(localStorage.getItem(PLAYLIST_KEY) || "[]");
       if (Array.isArray(saved)) setPlaylist(saved.filter((id) => typeof id === "string"));
@@ -117,6 +121,11 @@ export default function Explorer({ catalog }: { catalog: Catalog }) {
           </button>
         ))}
       </nav>
+
+      {/* ───────────── AI (kept mounted so the chat survives tab switches) ───────────── */}
+      <div hidden={tab !== "ai"}>
+        <Assistant onAddSongs={(ids) => savePlaylist([...new Set([...playlist, ...ids])])} />
+      </div>
 
       {/* ───────────── SONGS ───────────── */}
       {tab === "songs" && (

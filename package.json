@@ -5,16 +5,23 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:agents": "tsx --tsconfig tsconfig.json tests/agents.mock.mts"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^4.0.86",
+    "@ai-sdk/react": "^4.0.183",
+    "ai": "^7.0.179",
     "next": "^16.4.6",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "react-markdown": "^10.1.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }
